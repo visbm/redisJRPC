@@ -1,12 +1,20 @@
 env: "test"
+
 db: "redis"
 
-mysql: 
+pgSQL: 
   port: "5432"
   host: "0.0.0.0"
-  user: "user"
+  user: "pgSQL"
   password: "admin"
-  
+  DBName: "article"
+  SSLMode: "disable"  
+
+redis: 
+  port: "6379"
+  host: "0.0.0.0"
+  password: ""  
+  DB: 0
 
 httpServer:
   port: "8080"
@@ -14,9 +22,3 @@ httpServer:
   readTimeout: 10s
   writeTimeout: 10s
 
-
-redis: 
-  port: "6379"
-  host: "0.0.0.0"
-  password: ""  
-  DB: 0

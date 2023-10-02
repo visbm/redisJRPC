@@ -31,14 +31,14 @@ func (h handler) SaveArticle(w http.ResponseWriter, r *http.Request) {
 	err := render.DecodeJSON(r.Body, &req)
 	if err != nil {
 		h.logger.Errorf("%s", err)
-		render.JSON(w, r, err)
+		render.JSON(w, r, NewRespError(err, http.StatusBadRequest))
 		return
 	}
 
 	resp, err := h.service.CreateArticle(&req)
 	if err != nil {
 		h.logger.Errorf("%s", err)
-		render.JSON(w, r, err)
+		render.JSON(w, r, NewRespError(err, http.StatusBadRequest))
 		return
 	}
 
@@ -49,14 +49,14 @@ func (h handler) GetArticle(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
 		h.logger.Info("alias is empty")
-		render.JSON(w, r, fmt.Errorf("alias is empty"))
+		render.JSON(w, r, NewRespError(fmt.Errorf("alias is empty"), http.StatusBadRequest))
 		return
 	}
 
 	resp, err := h.service.GetArticle(id)
 	if err != nil {
 		h.logger.Errorf("%s", err)
-		render.JSON(w, r, err)
+		render.JSON(w, r, NewRespError(err, http.StatusBadRequest))
 		return
 	}
 
@@ -64,12 +64,12 @@ func (h handler) GetArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h handler) GetArticles(w http.ResponseWriter, r *http.Request) {
-	
+
 	resp, err := h.service.GetArticles()
 	if err != nil {
 		h.logger.Errorf("%s", err)
-		render.JSON(w, r, err)
-		return
+		render.JSON(w, r, NewRespError(err, http.StatusBadRequest))
+
 	}
 
 	render.JSON(w, r, resp)

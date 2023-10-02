@@ -37,3 +37,4 @@ func MapArticlesToResponse(articles []Article) []handlers.ArticleResponse {
 	}
 	return resp
 }
+

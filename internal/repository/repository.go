@@ -4,7 +4,7 @@ import (
 	"errors"
 	"redisjrpc/internal/config"
 	"redisjrpc/internal/repository/models"
-	"redisjrpc/internal/repository/mysqldb"
+	"redisjrpc/internal/repository/pgsqldb"
 	"redisjrpc/internal/repository/redisdb"
 	"redisjrpc/pkg/logger"
 )
@@ -18,11 +18,12 @@ type ArticleRepository interface {
 }
 
 func NewArticleRepository(cfg config.Config, logger logger.Logger) (ArticleRepository, error) {
+		
 	switch cfg.DBType {
 	case "redis":
 		return repository.NewRedisDatabase(cfg.Redis, logger)
-	case "mysql":
-		return mysqldb.NewMysqlDB(cfg.MySQLStorage, logger)
+	case "pgSQL":
+		return pgsqldb.NewPgSqlDB(cfg.PgSQL, logger)
 
 	default:
 		return nil, errors.New("invalid db type")

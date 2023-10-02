@@ -9,20 +9,20 @@ import (
 )
 
 type Config struct {
-	Env          string       `yaml:"env"`
-	DBType       string       `yaml:"db"`
-	MySQLStorage MySQLStorage `yaml:"mysql`
-	Redis        Redis        `yaml:"redis`
-	HttpServer   HttpServer   `yaml:"httpServer"`
+	Env        string     `yaml:"env"`
+	DBType     string     `yaml:"db"`
+	PgSQL      PgSQL      `yaml:"pgSQL"`
+	Redis      Redis      `yaml:"redis"`
+	HttpServer HttpServer `yaml:"httpServer"`
 }
 
-type MySQLStorage struct {
+type PgSQL struct {
 	Port     string `yaml:"port"`
 	Host     string `yaml:"host"`
 	Username string `yaml:"user"`
-	DBName   string `yaml:"DBName"`
 	Password string `yaml:"password"`
-	SSLMode  string `yaml:"password"`
+	DBName   string `yaml:"DBName"`
+	SSLMode  string `yaml:"SSLMode"`
 }
 
 type Redis struct {
