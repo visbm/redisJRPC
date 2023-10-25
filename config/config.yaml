@@ -12,7 +12,7 @@ pgSQL:
 
 redis: 
   port: "6379"
-  host: "0.0.0.0"
+  host: "red-cksmfl1f3gac73cm1mdg"
   password: ""  
   DB: 0
 
