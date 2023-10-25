@@ -26,9 +26,7 @@ type PgSQL struct {
 }
 
 type Redis struct {
-	Port     string `yaml:"port"`
-	Host     string `yaml:"host"`
-	Password string `yaml:"password"`
+	Url     string `yaml:"url"`	
 	DB       int    `yaml:"db"`
 }
 
