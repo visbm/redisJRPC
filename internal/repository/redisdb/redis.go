@@ -13,12 +13,6 @@ type RedisDatabase struct {
 
 
 func NewRedisDatabase(cfg config.Redis, logger logger.Logger) (*RedisDatabase, error) {
-	/* rdb := redis.NewClient(&redis.Options{
-		Addr:     cfg.Host + ":" + cfg.Port,
-		Password: cfg.Password,
-		DB:       cfg.DB,
-	}) */
-
     opts, err := redis.ParseURL(cfg.Url)
     if err != nil {
         return nil, err
