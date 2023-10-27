@@ -1,6 +1,6 @@
 env: "test"
 
-db: "redis"
+db: "mongo"
 
 pgSQL: 
   port: "5432"
@@ -11,11 +11,10 @@ pgSQL:
   SSLMode: "disable"  
 
 redis:
-#deploy 
- # url: "redis://red-cksmfl1f3gac73cm1mdg:6379"
 #local
-  url: "rediss://red-cksmfl1f3gac73cm1mdg:1MXMF0Ix6sV8YLm08xXgwvekjJv5afEL@oregon-redis.render.com:6379"
-
+  url: "redis://0.0.0.0:6379"
+#deploy 
+# url: "rediss://red-cksmfl1f3gac73cm1mdg:1MXMF0Ix6sV8YLm08xXgwvekjJv5afEL@oregon-redis.render.com:6379"
   DB: 0
 
 httpServer:
@@ -24,3 +23,9 @@ httpServer:
   readTimeout: 10s
   writeTimeout: 10s
 
+
+mongo:
+  port: "27017"
+  host: "0.0.0.0"
+  user: "user"
+  password: "user"

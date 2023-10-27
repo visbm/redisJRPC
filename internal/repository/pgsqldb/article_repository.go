@@ -2,15 +2,29 @@ package pgsqldb
 
 import (
 	"redisjrpc/internal/repository/models"
+	"redisjrpc/internal/database/pgsqldb"
+	"redisjrpc/pkg/logger"
 )
 
-func (r PgSqlRepository) GetArticle(id string) (models.Article, error) {
+type pgSqlRepository struct{
+	db *pgsqldb.PgSqlDB
+	logger logger.Logger
+}
+
+func NewArticlePgSqlRepository(db *pgsqldb.PgSqlDB, logger logger.Logger) *pgSqlRepository {
+	return &pgSqlRepository{
+		db: db,
+		logger: logger,
+	}
+}
+
+func (r pgSqlRepository) GetArticle(id string) (models.Article, error) {
 	query := `SELECT id, url, title
 			FROM articles 
 			WHERE id = $1 `
 
 	var article models.Article
-	if err := r.db.QueryRow(query, id).
+	if err := r.db.DB.QueryRow(query, id).
 		Scan(
 			&article.ID,
 			&article.URL,
@@ -24,8 +38,8 @@ func (r PgSqlRepository) GetArticle(id string) (models.Article, error) {
 }
 
 
-func (r PgSqlRepository) GetArticles() ([]models.Article, error) {
-	rows, err := r.db.Query("SELECT * FROM articles")
+func (r pgSqlRepository) GetArticles() ([]models.Article, error) {
+	rows, err := r.db.DB.Query("SELECT * FROM articles")
 	if err != nil {
 		r.logger.Errorf("Can't find articles. Err msg: %v", err)
 		return nil, err
@@ -53,8 +67,8 @@ func (r PgSqlRepository) GetArticles() ([]models.Article, error) {
 }
 
 
-func (r PgSqlRepository) CreateArticle(a models.Article) (models.Article, error) {
-	tx, err := r.db.Begin()
+func (r pgSqlRepository) CreateArticle(a models.Article) (models.Article, error) {
+	tx, err := r.db.DB.Begin()
 	if err != nil {
 		r.logger.Errorf("error occurred while creating article, err: %s", err)
 		return a, err

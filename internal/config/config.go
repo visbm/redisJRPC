@@ -14,6 +14,7 @@ type Config struct {
 	PgSQL      PgSQL      `yaml:"pgSQL"`
 	Redis      Redis      `yaml:"redis"`
 	HttpServer HttpServer `yaml:"httpServer"`
+	Mongo      Mongo      `yaml:"mongo"`
 }
 
 type PgSQL struct {
@@ -26,8 +27,8 @@ type PgSQL struct {
 }
 
 type Redis struct {
-	Url     string `yaml:"url"`	
-	DB       int    `yaml:"db"`
+	Url string `yaml:"url"`
+	DB  int    `yaml:"db"`
 }
 
 type HttpServer struct {
@@ -35,6 +36,15 @@ type HttpServer struct {
 	Host         string        `yaml:"host"`
 	WriteTimeout time.Duration `yaml:"writeTimeout"`
 	ReadTimeout  time.Duration `yaml:"readTimeout"`
+}
+
+type Mongo struct {
+	Port     string `yaml:"port"`
+	Host     string `yaml:"host"`
+	Username string `yaml:"user"`
+	Password string `yaml:"password"`
+	DBName   string `yaml:"DBName"`
+	SSLMode  string `yaml:"SSLMode"`
 }
 
 func LoadConfig(configPath string) (*Config, error) {

@@ -11,6 +11,7 @@ import (
 	"redisjrpc/internal/handlers"
 	"redisjrpc/internal/httpserver"
 	"redisjrpc/internal/repository"
+	"redisjrpc/internal/database"
 	"redisjrpc/internal/service"
 	"redisjrpc/pkg/logger"
 )
@@ -25,13 +26,20 @@ func main() {
 	}
 	logger.Info("config loaded ", config.DBType)
 
-	db, err := repository.NewArticleRepository(*config, logger)
+	db, err := database.NewDatabase(*config, logger)
 	if err != nil {
 		logger.Fatal(err)
 	}
-	logger.Info("database created ", config.DBType)
+	logger.Info("db created ", db)
 
-	service := service.NewArticleService(db, logger)
+
+	repo, err := repository.NewArticleRepository(*config,db, logger)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	logger.Info("repo created ")
+
+	service := service.NewArticleService(repo, logger)
 	articleHandler := handlers.NewArticleHandler(service, logger)
 	handler := handlers.NewHandler(articleHandler)
 

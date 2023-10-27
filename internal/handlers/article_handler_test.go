@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestHandlerSaveArticle(t *testing.T) {
+func Test_handler_SaveArticle(t *testing.T) {
 	type args struct {
 		w http.ResponseWriter
 		r *http.Request

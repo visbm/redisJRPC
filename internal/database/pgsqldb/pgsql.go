@@ -8,24 +8,28 @@ import (
 	"redisjrpc/pkg/logger"
 )
 
-type PgSqlRepository struct {
-	db     *sql.DB
+type PgSqlDB struct {
+	DB     *sql.DB
 	logger logger.Logger
 }
 
-func NewPgSqlDB(cfg config.PgSQL, logger logger.Logger) (*PgSqlRepository, error) {
+func NewPgSqlDB() *PgSqlDB {
+	return &PgSqlDB{}
+}
+
+func (m *PgSqlDB) Open(cfg config.Config, logger logger.Logger)  error {
 	dns := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		cfg.Host, cfg.Port, cfg.Username, cfg.Password, cfg.DBName, cfg.SSLMode)
+		cfg.PgSQL.Host, cfg.PgSQL.Port, cfg.PgSQL.Username, cfg.PgSQL.Password, cfg.PgSQL.DBName, cfg.PgSQL.SSLMode)
 
 	db, err := sql.Open("postgres", dns)
 	if err != nil {
 		logger.Panicf("Database open error:%s", err)
-		return nil, err
+		return  err
 	}
 	err = db.Ping()
 	if err != nil {
 		logger.Errorf("DB ping error:%s", err)
-		return nil, err
+		return  err
 	}
 
 	stmt, err := db.Prepare(`
@@ -36,21 +40,20 @@ func NewPgSqlDB(cfg config.PgSQL, logger logger.Logger) (*PgSqlRepository, error
 	`)
 	if err != nil {
 		logger.Errorf("DB Prepare error:%s", err)
-		return nil, fmt.Errorf("%s", err)
+		return  fmt.Errorf("%s", err)
 	}
 
 	_, err = stmt.Exec()
 	if err != nil {
 		logger.Errorf("DB Exec error:%s", err)
-		return nil, fmt.Errorf("%s", err)
+		return  fmt.Errorf("%s", err)
 	}
 
-	return &PgSqlRepository{
-		db:     db,
-		logger: logger,
-	}, nil
+	m.DB = db
+	m.logger = logger
+	return nil
 }
 
-func (m PgSqlRepository) Close() error {
-	return m.db.Close()
+func (m *PgSqlDB) Close() error {
+	return m.DB.Close()
 }
