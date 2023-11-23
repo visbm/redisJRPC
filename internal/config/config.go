@@ -11,6 +11,7 @@ import (
 type Config struct {
 	Env        string     `yaml:"env"`
 	DBType     string     `yaml:"db"`
+	ServerType string     `yaml:"server"`
 	PgSQL      PgSQL      `yaml:"pgSQL"`
 	Redis      Redis      `yaml:"redis"`
 	HttpServer HttpServer `yaml:"httpServer"`

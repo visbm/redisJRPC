@@ -19,6 +19,7 @@ func (s *grpcServer) GetArticle(ctx context.Context, id *article_proto.GetArticl
 
 	article, err := s.articleService.GetArticle(id.Id)
 	if err != nil {
+		s.logger.Errorf("error getting article: %v", err)
 		return &article_proto.ArticleResponse{}, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -31,12 +32,12 @@ func (s *grpcServer) GetArticle(ctx context.Context, id *article_proto.GetArticl
 }
 
 func (s *grpcServer) CreateArticle(ctx context.Context, article *article_proto.ArticleRequest) (*article_proto.ArticleResponse, error) {
-
 	resp, err := s.articleService.CreateArticle(&service.ArticleRequest{
 		Title: article.Title,
 		URL:   article.Url,
 	})
 	if err != nil {
+		s.logger.Errorf("error creating article: %v", err)
 		return &article_proto.ArticleResponse{}, status.Error(codes.Internal, err.Error())
 	}
 
@@ -51,6 +52,7 @@ func (s *grpcServer) CreateArticle(ctx context.Context, article *article_proto.A
 func (s *grpcServer) GetArticles(ctx context.Context, id *article_proto.Empty) (*article_proto.ArticleArray, error) {
 	articles, err := s.articleService.GetArticles()
 	if err != nil {
+		s.logger.Errorf("error getting all article: %v", err)
 		return &article_proto.ArticleArray{}, status.Error(codes.InvalidArgument, err.Error())
 	}
 

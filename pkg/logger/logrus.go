@@ -1,8 +1,11 @@
 package logger
 
 import (
-	"github.com/sirupsen/logrus"
+	"context"
 	"os"
+
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
+	"github.com/sirupsen/logrus"
 )
 
 type Logg struct {
@@ -19,4 +22,8 @@ func GetLogger() *Logg {
 	l.SetOutput(os.Stdout)
 	l.SetLevel(logrus.DebugLevel)
 	return &Logg{logrus.NewEntry(l)}
+}
+
+func (l *Logg) Log(ctx context.Context, level logging.Level, s string, a ...any) {
+	l.Info(s)
 }
