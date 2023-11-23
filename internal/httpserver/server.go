@@ -29,12 +29,12 @@ func NewServer(cnfg config.HttpServer, router http.Handler, logger logger.Logger
 }
 
 func (s *Server) Start() error {
-
-	s.Logger.Infof("Server starts at %s", s.httpServer.Addr)
 	err := s.httpServer.ListenAndServe()
 	if err != nil {
 		return err
 	}
+	s.Logger.Infof("Server starts at %s", s.httpServer.Addr)
+
 	return nil
 }
 

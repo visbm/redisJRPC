@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"net/http"
 	"os"
 	"os/signal"
 
@@ -38,21 +37,20 @@ func main() {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	logger.Info("repo created ")
+	logger.Info("repo created")
 
 	service := service.NewArticleService(repo, logger)
+	logger.Info("service created")
+
 	articleHandler := handlers.NewArticleHandler(service, logger)
 	handler := handlers.NewHandler(articleHandler)
+	logger.Info("handler created")
 
 	server := httpserver.NewServer(config.HttpServer, handler.InitRoutes(), logger)
+	logger.Info("server created")
 
 	grpcserver := grpcserver.NewGrpcServer(config.Grpc, service)
-	err = grpcserver.Start()
-	if err != nil {
-		logger.Fatal(err)
-	}
-
-	logger.Info("grpcserver started on port ", config.Grpc.Port)
+	logger.Info("grpcserver created")
 
 	idleConnsClosed := make(chan struct{})
 	go func() {
@@ -74,9 +72,19 @@ func main() {
 		os.Exit(0)
 	}()
 
-	if err := server.Start(); err != http.ErrServerClosed {
+	/* if err := server.Start(); err != http.ErrServerClosed {
 		logger.Panicf("Error while starting server:%s", err)
-	}
+	} */
+
+	go func() {
+		err = grpcserver.Start()
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}()
+	
+	logger.Info("grpcserver started on port ", config.Grpc.Port)
+
 	<-idleConnsClosed
 
 }
