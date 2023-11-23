@@ -11,17 +11,11 @@ import (
 	"redisjrpc/pkg/logger"
 )
 
-type Server interface {
-	Start() error
-	Shutdown(context.Context) error
-	GetAdress() string
-}
-
 type App struct {
 	logger     logger.Logger
 	database   database.Database
 	repository repository.ArticleRepository
-	server     Server
+	server     server.Server
 }
 
 func (a *App) StartApp(config config.Config, logger logger.Logger) error {
