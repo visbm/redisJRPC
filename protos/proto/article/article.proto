@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package article;
+
+option go_package = "article.proto";
+
+message ArticleResponse {
+    string id = 1;
+    string url = 2;
+    string title = 3;
+}
+
+message ArticleArray{
+    repeated ArticleResponse values = 1;
+}
+
+message ArticleRequest {
+    string url = 1;
+    string title = 2;
+}
+
+message GetArticleID {
+    string id = 1;
+}
+
+message Empty {}
+
+service Article {
+    rpc GetArticle(GetArticleID) returns (ArticleResponse);
+    rpc GetArticles(Empty) returns (ArticleArray);
+    rpc CreateArticle(ArticleRequest) returns (ArticleResponse);
+}

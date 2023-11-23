@@ -6,14 +6,16 @@ import (
 	"os"
 	"os/signal"
 
-	_ "github.com/go-sql-driver/mysql"
 	"redisjrpc/internal/config"
+	"redisjrpc/internal/database"
+	"redisjrpc/internal/grpcserver"
 	"redisjrpc/internal/handlers"
 	"redisjrpc/internal/httpserver"
 	"redisjrpc/internal/repository"
-	"redisjrpc/internal/database"
 	"redisjrpc/internal/service"
 	"redisjrpc/pkg/logger"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
@@ -32,8 +34,7 @@ func main() {
 	}
 	logger.Info("db created ", db)
 
-
-	repo, err := repository.NewArticleRepository(*config,db, logger)
+	repo, err := repository.NewArticleRepository(*config, db, logger)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -44,6 +45,14 @@ func main() {
 	handler := handlers.NewHandler(articleHandler)
 
 	server := httpserver.NewServer(config.HttpServer, handler.InitRoutes(), logger)
+
+	grpcserver := grpcserver.NewGrpcServer(config.Grpc, service)
+	err = grpcserver.Start()
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	logger.Info("grpcserver started on port ", config.Grpc.Port)
 
 	idleConnsClosed := make(chan struct{})
 	go func() {
@@ -59,6 +68,7 @@ func main() {
 		if err != nil {
 			logger.Errorf("Error occurred on db connection close: %s", err.Error())
 		}
+		grpcserver.Stop()
 
 		logger.Info("shutting down")
 		os.Exit(0)

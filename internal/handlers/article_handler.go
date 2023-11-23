@@ -2,16 +2,18 @@ package handlers
 
 import (
 	"fmt"
+	"net/http"
+	"redisjrpc/internal/service"
+	"redisjrpc/pkg/logger"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"net/http"
-	"redisjrpc/pkg/logger"
 )
 
 type ArticleService interface {
-	GetArticle(id string) (*ArticleResponse, error)
-	GetArticles() ([]ArticleResponse, error)
-	CreateArticle(article *ArticleRequest) (*ArticleResponse, error)
+	GetArticle(id string) (*service.ArticleResponse, error)
+	GetArticles() ([]service.ArticleResponse, error)
+	CreateArticle(article *service.ArticleRequest) (*service.ArticleResponse, error)
 }
 
 type handler struct {
@@ -35,7 +37,8 @@ func (h handler) SaveArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.service.CreateArticle(&req)
+	createArticle := articleReq(req)
+	resp, err := h.service.CreateArticle(&createArticle)
 	if err != nil {
 		h.logger.Errorf("%s", err)
 		render.JSON(w, r, NewRespError(err, http.StatusBadRequest))
@@ -53,24 +56,24 @@ func (h handler) GetArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.service.GetArticle(id)
+	article, err := h.service.GetArticle(id)
 	if err != nil {
 		h.logger.Errorf("%s", err)
 		render.JSON(w, r, NewRespError(err, http.StatusBadRequest))
 		return
 	}
 
+	resp := mapArticleToResponse(*article)
 	render.JSON(w, r, resp)
 }
 
 func (h handler) GetArticles(w http.ResponseWriter, r *http.Request) {
-
-	resp, err := h.service.GetArticles()
+	articles, err := h.service.GetArticles()
 	if err != nil {
 		h.logger.Errorf("%s", err)
 		render.JSON(w, r, NewRespError(err, http.StatusBadRequest))
 
 	}
-
+	resp := mapArticlesResponse(articles)
 	render.JSON(w, r, resp)
 }

@@ -6,3 +6,5 @@ docker run --name psql -p 5432:5432 -e POSTGRES_USER=pgSQL -e POSTGRES_PASSWORD=
 
 
 docker run -d -p 27017:27017 --name my-mongodb  -e MONGO_INITDB_ROOT_USERNAME=user -e MONGO_INITDB_ROOT_PASSWORD=user mongo
+
+protoc -I protos protos/proto/article/article.proto --go_out=./protos/gen/ --go_opt=paths=source_relative --go-grpc_out=./protos/gen/ --go-grpc_opt=paths=source_relative

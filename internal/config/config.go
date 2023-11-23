@@ -14,6 +14,7 @@ type Config struct {
 	PgSQL      PgSQL      `yaml:"pgSQL"`
 	Redis      Redis      `yaml:"redis"`
 	HttpServer HttpServer `yaml:"httpServer"`
+	Grpc       Grpc       `yaml:"grpc"`
 	Mongo      Mongo      `yaml:"mongo"`
 }
 
@@ -36,6 +37,11 @@ type HttpServer struct {
 	Host         string        `yaml:"host"`
 	WriteTimeout time.Duration `yaml:"writeTimeout"`
 	ReadTimeout  time.Duration `yaml:"readTimeout"`
+}
+
+type Grpc struct {
+	Port    string        `yaml:"port"`
+	Timeout time.Duration `yaml:"timeout"`
 }
 
 type Mongo struct {

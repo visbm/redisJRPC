@@ -23,9 +23,13 @@ httpServer:
   readTimeout: 10s
   writeTimeout: 10s
 
+grpc:
+  port: "44044"
+  timeout: 10s
 
 mongo:
   port: "27017"
   host: "0.0.0.0"
   user: "user"
   password: "user"
+
