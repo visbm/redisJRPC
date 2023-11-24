@@ -5,13 +5,13 @@ import (
 
 	"redisjrpc/internal/config"
 	"redisjrpc/internal/database"
-	mongodbDB "redisjrpc/internal/database/mongodb"
-	pgsqldbDB "redisjrpc/internal/database/pgsqldb"
-	redisdbDB "redisjrpc/internal/database/redisdb"
+	"redisjrpc/internal/database/mongodb"
+	"redisjrpc/internal/database/pgsqldb"
+	"redisjrpc/internal/database/redisdb"
 	"redisjrpc/internal/repository/models"
-	"redisjrpc/internal/repository/mongodb"
-	"redisjrpc/internal/repository/pgsqldb"
-	"redisjrpc/internal/repository/redisdb"
+	mongodbRepo"redisjrpc/internal/repository/mongodb"
+	pgsqldbRepo"redisjrpc/internal/repository/pgsqldb"
+	redisdbRepo"redisjrpc/internal/repository/redisdb"
 	"redisjrpc/pkg/logger"
 )
 
@@ -24,11 +24,11 @@ type ArticleRepository interface {
 func NewArticleRepository(cfg config.Config, db database.Database, logger logger.Logger) (ArticleRepository, error) {
 	switch cfg.DBType {
 	case "redis":
-		return redisdb.NewRedisArticleRepository(db.(*redisdbDB.RedisDatabase), logger), nil
+		return redisRepo.NewRedisArticleRepository(db.(*redisdb.RedisDatabase), logger), nil
 	case "pgSQL":
-		return pgsqldb.NewArticlePgSqlRepository(db.(*pgsqldbDB.PgSqlDB), logger), nil
+		return pgsqlRepo.NewArticlePgSqlRepository(db.(*pgsqldb.PgSqlDB), logger), nil
 	case "mongo":
-		return mongodb.NewArticleMongoRepository(db.(*mongodbDB.MongoDB), logger), nil
+		return mongoRepo.NewArticleMongoRepository(db.(*mongodb.MongoDB), logger), nil
 	default:
 		return nil, errors.New("invalid db type")
 	}
