@@ -2,7 +2,7 @@ env: "test"
 
 db: "mongo"
 
-server: "grpc"
+server: "http"
 
 pgSQL: 
   port: "5432"

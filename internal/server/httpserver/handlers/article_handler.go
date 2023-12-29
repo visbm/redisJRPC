@@ -48,8 +48,8 @@ func (h handler) SaveArticle(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, resp)
 }
 
-func (h handler) GetArticle(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
+func (h handler) GetArticle(w http.ResponseWriter, r *http.Request) {	
+	id := chi.URLParam(r, "id")	
 	if id == "" {
 		h.logger.Info("alias is empty")
 		render.JSON(w, r, NewRespError(fmt.Errorf("alias is empty"), http.StatusBadRequest))
@@ -72,7 +72,7 @@ func (h handler) GetArticles(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.logger.Errorf("%s", err)
 		render.JSON(w, r, NewRespError(err, http.StatusBadRequest))
-
+		return
 	}
 	resp := mapArticlesResponse(articles)
 	render.JSON(w, r, resp)

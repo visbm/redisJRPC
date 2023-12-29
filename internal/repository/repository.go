@@ -24,11 +24,11 @@ type ArticleRepository interface {
 func NewArticleRepository(cfg config.Config, db database.Database, logger logger.Logger) (ArticleRepository, error) {
 	switch cfg.DBType {
 	case "redis":
-		return redisRepo.NewRedisArticleRepository(db.(*redisdb.RedisDatabase), logger), nil
+		return redisdbRepo.NewRedisArticleRepository(db.(*redisdb.RedisDatabase), logger), nil
 	case "pgSQL":
-		return pgsqlRepo.NewArticlePgSqlRepository(db.(*pgsqldb.PgSqlDB), logger), nil
+		return pgsqldbRepo.NewArticlePgSqlRepository(db.(*pgsqldb.PgSqlDB), logger), nil
 	case "mongo":
-		return mongoRepo.NewArticleMongoRepository(db.(*mongodb.MongoDB), logger), nil
+		return mongodbRepo.NewArticleMongoRepository(db.(*mongodb.MongoDB), logger), nil
 	default:
 		return nil, errors.New("invalid db type")
 	}
