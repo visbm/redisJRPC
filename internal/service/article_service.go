@@ -1,11 +1,10 @@
 package service
 
 import (
-	"redisjrpc/pkg/logger"
 	"redisjrpc/internal/repository"
-	"redisjrpc/internal/handlers"
-	"redisjrpc/internal/repository/models"
-	"github.com/satori/go.uuid"
+	"redisjrpc/pkg/logger"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 type ArticleService struct {
@@ -21,40 +20,39 @@ func NewArticleService(articleRepository repository.ArticleRepository, logger lo
 
 }
 
-func (s *ArticleService) GetArticles() ([]handlers.ArticleResponse, error) {
+func (s *ArticleService) GetArticles() ([]ArticleResponse, error) {
 	articles, err := s.articleRepository.GetArticles()
 	if err != nil {
 		s.logger.Errorf("error while getting articles: %v", err)
 		return nil, err
 	}
 
-	resp := models.MapArticlesToResponse(articles)
-
+	resp := MapArticlesToResponse(articles)
 	return resp, nil
 }
 
-func (s *ArticleService) GetArticle(id string) (*handlers.ArticleResponse, error) {
+func (s *ArticleService) GetArticle(id string) (*ArticleResponse, error) {
 	article, err := s.articleRepository.GetArticle(id)
 	if err != nil {
 		s.logger.Errorf("error while getting article: %v", err)
 		return nil, err
 	}
-	resp := models.MapArticleToResponse(article)
+	resp := MapArticleToResponse(article)
 
 	return &resp, nil
 }
 
-func (s *ArticleService) CreateArticle(req *handlers.ArticleRequest) (*handlers.ArticleResponse, error) {
-	article := models.MapReqToArticle(*req)
+func (s *ArticleService) CreateArticle(req *ArticleRequest) (*ArticleResponse, error) {
+	article := MapReqToArticle(*req)
 	article.ID = uuid.NewV4().String()
 
-	article, err := s.articleRepository.CreateArticle(article)	
+	article, err := s.articleRepository.CreateArticle(article)
 	if err != nil {
 		s.logger.Errorf("error while creating article: %v", err)
 		return nil, err
 	}
 
-	resp := models.MapArticleToResponse(article)
+	resp := MapArticleToResponse(article)
 
 	return &resp, nil
 }

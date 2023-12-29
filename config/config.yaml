@@ -1,12 +1,23 @@
 env: "test"
-db: "redis"
 
-mysql: 
+db: "mongo"
+
+server: "http"
+
+pgSQL: 
   port: "5432"
   host: "0.0.0.0"
-  user: "user"
+  user: "pgSQL"
   password: "admin"
-  
+  DBName: "article"
+  SSLMode: "disable"  
+
+redis:
+#local
+  url: "redis://0.0.0.0:6379"
+#deploy 
+# url: "rediss://red-cksmfl1f3gac73cm1mdg:1MXMF0Ix6sV8YLm08xXgwvekjJv5afEL@oregon-redis.render.com:6379"
+  DB: 0
 
 httpServer:
   port: "8080"
@@ -14,9 +25,13 @@ httpServer:
   readTimeout: 10s
   writeTimeout: 10s
 
+grpc:
+  port: "44044"
+  timeout: 10s
 
-redis: 
-  port: "6379"
+mongo:
+  port: "27017"
   host: "0.0.0.0"
-  password: ""  
-  DB: 0
+  user: "user"
+  password: "user"
+

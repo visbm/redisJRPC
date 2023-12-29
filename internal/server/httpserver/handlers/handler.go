@@ -1,22 +1,23 @@
 package handlers
 
 import (
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 	"net/http"
 	"time"
+
+	sentryhttp "github.com/getsentry/sentry-go/http"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 )
 
 type Handler struct {
-	articleHandler ArticleHandler	
+	articleHandler ArticleHandler
 }
 
 func NewHandler(articleHandler ArticleHandler) *Handler {
 	return &Handler{
-		articleHandler:articleHandler,
+		articleHandler: articleHandler,
 	}
 }
-
 
 type ArticleHandler interface {
 	SaveArticle(w http.ResponseWriter, r *http.Request)
@@ -25,8 +26,13 @@ type ArticleHandler interface {
 }
 
 func (h *Handler) InitRoutes() *chi.Mux {
+	sentryHandler := sentryhttp.New(sentryhttp.Options{
+		Repanic: true,
+	})
+
 	r := chi.NewRouter()
-	
+
+	r.Use(sentryHandler.Handle)
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)

@@ -1,6 +1,13 @@
 package logger
 
+import (
+	"context"
+
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
+)
+
 type Logger interface {
+	Log(context.Context, logging.Level, string, ...any)
 	Errorf(format string, args ...interface{})
 	Fatalf(format string, args ...interface{})
 	Fatal(args ...interface{})

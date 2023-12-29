@@ -9,27 +9,28 @@ import (
 )
 
 type Config struct {
-	Env          string       `yaml:"env"`
-	DBType       string       `yaml:"db"`
-	MySQLStorage MySQLStorage `yaml:"mysql`
-	Redis        Redis        `yaml:"redis`
-	HttpServer   HttpServer   `yaml:"httpServer"`
+	Env        string     `yaml:"env"`
+	DBType     string     `yaml:"db"`
+	ServerType string     `yaml:"server"`
+	PgSQL      PgSQL      `yaml:"pgSQL"`
+	Redis      Redis      `yaml:"redis"`
+	HttpServer HttpServer `yaml:"httpServer"`
+	Grpc       Grpc       `yaml:"grpc"`
+	Mongo      Mongo      `yaml:"mongo"`
 }
 
-type MySQLStorage struct {
+type PgSQL struct {
 	Port     string `yaml:"port"`
 	Host     string `yaml:"host"`
 	Username string `yaml:"user"`
-	DBName   string `yaml:"DBName"`
 	Password string `yaml:"password"`
-	SSLMode  string `yaml:"password"`
+	DBName   string `yaml:"DBName"`
+	SSLMode  string `yaml:"SSLMode"`
 }
 
 type Redis struct {
-	Port     string `yaml:"port"`
-	Host     string `yaml:"host"`
-	Password string `yaml:"password"`
-	DB       int    `yaml:"db"`
+	Url string `yaml:"url"`
+	DB  int    `yaml:"db"`
 }
 
 type HttpServer struct {
@@ -37,6 +38,20 @@ type HttpServer struct {
 	Host         string        `yaml:"host"`
 	WriteTimeout time.Duration `yaml:"writeTimeout"`
 	ReadTimeout  time.Duration `yaml:"readTimeout"`
+}
+
+type Grpc struct {
+	Port    string        `yaml:"port"`
+	Timeout time.Duration `yaml:"timeout"`
+}
+
+type Mongo struct {
+	Port     string `yaml:"port"`
+	Host     string `yaml:"host"`
+	Username string `yaml:"user"`
+	Password string `yaml:"password"`
+	DBName   string `yaml:"DBName"`
+	SSLMode  string `yaml:"SSLMode"`
 }
 
 func LoadConfig(configPath string) (*Config, error) {

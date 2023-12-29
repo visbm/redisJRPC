@@ -1,3 +1,10 @@
- docker run --name some-redis -d redis
+docker run -d -p 6379:6379 --name my-redis -e REDIS_PASSWORD= -e REDIS_HOST=0.0.0.0 -e REDIS_DB=0 redis
 
- docker run -d -p 6379:6379 --name my-redis -e REDIS_PASSWORD= -e REDIS_HOST=0.0.0.0 -e REDIS_DB=0 redis
+
+docker run --name psql -p 5432:5432 -e POSTGRES_USER=pgSQL -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=article -e DB_HOST=articles_database -e POSTGRES_SSL_MODE=disable -d postgres:13.3
+
+
+
+docker run -d -p 27017:27017 --name my-mongodb  -e MONGO_INITDB_ROOT_USERNAME=user -e MONGO_INITDB_ROOT_PASSWORD=user mongo
+
+protoc -I protos protos/proto/article/article.proto --go_out=./protos/gen/ --go_opt=paths=source_relative --go-grpc_out=./protos/gen/ --go-grpc_opt=paths=source_relative
